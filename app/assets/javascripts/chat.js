@@ -1,5 +1,6 @@
 $(document).ready(function() {
   var dispatcher = new WebSocketRails(window.location.host + "/websocket");
+  // var dispatcher = new WebSocketRails("https://localhost:443/websocket");
   console.log('dispatcher', dispatcher);
 
   dispatcher.on_open = function(data) {
@@ -12,15 +13,18 @@ $(document).ready(function() {
       name: 'den'
     }
     console.log('user', user);
-    dispatcher.trigger('new_message', user);
-    console.log("dispatcher", dispatcher.trigger(success_cb, 'new_message', user));
+    dispatcher.trigger('new_message', user, success_cb, error_cb);
+    console.log("dispatcher", dispatcher.trigger('new_message', user, success_cb, error_cb));
 
     dispatcher.bind('new_message', function(data) {
       console.log('new mesage', data);
     })
 
     function success_cb(data){
-      console.log('success_cb', data)
+      console.log('success_cb', data);
+    }
+    function error_cb(data){
+      console.log('error', data);
     }
   } catch (e) {
     console.log("Ага, попался!", e);
@@ -36,7 +40,14 @@ $(document).ready(function() {
       title: 'This post was awful',
       text: 'really awful'
     }
-    dispatcher.trigger('create_posts', post);
+    dispatcher.trigger('create_posts', post, success_cb, error_cb);
+
+    function success_cb(data){
+      console.log('success_cb', data);
+    }
+    function error_cb(error){
+      console.log('error', error);
+    }
 
     console.log('stop send');
     });
