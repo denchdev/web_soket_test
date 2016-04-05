@@ -15,6 +15,10 @@ class PostsController < ApplicationController
   # GET /posts/new
   def new
     @post = Post.new
+    p 'ALL OK'
+    new_message = {:message => 'this is a message'}
+    # send_message :messa, new_message
+    broadcast_message :messa, new_message
   end
 
   # GET /posts/1/edit
